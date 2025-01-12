@@ -15,10 +15,12 @@ RUN pip install -U --no-cache-dir \
 
 # Set MOSEK environment variables
 ENV MOSEK_DIR=/opt/mosek
+ENV MOSEKLM_LICENSE_FILE=/root/mosek/mosek.lic
 ENV PATH="${MOSEK_DIR}/bin:${PATH}"
 
 # Copy MOSEK license
-COPY mosek.lic /root/.mosek/mosek.lic
+RUN mkdir -p /root/mosek
+COPY mosek.lic /root/mosek/mosek.lic
 
 # Install Julia packages
 RUN julia -e 'using Pkg; Pkg.add(PackageSpec(name="Combinatorics", version="1.0.2"))' \
