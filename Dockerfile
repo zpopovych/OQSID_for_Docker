@@ -79,7 +79,7 @@ RUN julia -e 'using Pkg; Pkg.add(PackageSpec(name="Combinatorics", version="1.0.
     && julia -e 'using Pkg; Pkg.add(PackageSpec(name="Mosek", version="10.2.0"))' \
     && julia -e 'using Pkg; Pkg.add(PackageSpec(name="MosekTools", version="0.15.1"))' \
     && julia -e 'using Pkg; Pkg.add(PackageSpec(name="NLopt", version="1.1.2"))' \
-    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="QuantumOptics", version="1.1.1"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="QuantumOptics"))' \
     && julia -e 'using Pkg; Pkg.add(PackageSpec(name="Random"))' \
     && julia -e 'using Pkg; Pkg.add(PackageSpec(name="Statistics"))' \
     && julia -e 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/wangjie212/TSSOS"))' \
