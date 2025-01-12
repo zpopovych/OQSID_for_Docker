@@ -37,5 +37,4 @@ RUN julia -e 'using Pkg; Pkg.add(PackageSpec(name="Combinatorics", version="1.0.
     && julia -e 'using Pkg; Pkg.API.precompile()'
 
 # Copy files from GitHub repository
-# Replace 'your-github-repo-url' with your actual repository URL
-RUN git clone https://github.com/zpopovych/OQSID_for_Docker.git /root
+RUN git clone https://github.com/zpopovych/OQSID_for_Docker.git /root/OQSID
