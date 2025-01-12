@@ -1,71 +1,41 @@
-# Use the specified Miniconda base image
-FROM registry.codeocean.com/codeocean/miniconda3:4.12.0-python3.9-ubuntu20.04
+# Base image with Python, Julia, and R pre-installed
+FROM registry.codeocean.com/codeocean/py-julia-r:python3.10.12-R4.2.3-julia1.7.0-ubuntu22.04
 
-# Set non-interactive mode for apt-get
+# Avoid prompts during the installation
 ARG DEBIAN_FRONTEND=noninteractive
+ARG MOSEKLM_LICENSE_FILE
 
-# Define MOSEK environment variables
+# Install Python packages
+RUN pip install -U --no-cache-dir \
+    h5py==3.12.1 \
+    matplotlib==3.10.0 \
+    numpy==2.2.1 \
+    pandas==2.2.3 \
+    scipy==1.15.0
+
+# Set MOSEK environment variables
 ENV MOSEK_DIR=/opt/mosek
 ENV PATH="${MOSEK_DIR}/bin:${PATH}"
 
-# Update and install required tools, Julia, Jupyter dependencies, and GUI libraries
-RUN apt-get update || apt-get update --fix-missing \
-    && apt-get install -y --no-install-recommends \
-    wget \
-    bzip2 \
-    build-essential \
-    python3-pip \
-    x11-apps \
-    libx11-utils \
-    xvfb \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Julia
-RUN wget https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.3-linux-x86_64.tar.gz -O julia.tar.gz \
-    && tar -xzf julia.tar.gz \
-    && mv julia-1.9.3 /usr/local/julia \
-    && ln -s /usr/local/julia/bin/julia /usr/local/bin/julia \
-    && rm julia.tar.gz
-
-# Download and install MOSEK
-RUN wget https://download.mosek.com/stable/10.2.11/mosektoolslinux64x86.tar.bz2 -O mosek.tar.bz2 \
-    && mkdir -p ${MOSEK_DIR} \
-    && tar -xjf mosek.tar.bz2 -C ${MOSEK_DIR} --strip-components=1 \
-    && rm mosek.tar.bz2
-
-# Set up MOSEK license (ensure the license file is available in the build context)
+# Copy MOSEK license
 COPY mosek.lic /root/.mosek/mosek.lic
 
+# Install Julia packages
+RUN julia -e 'using Pkg; Pkg.add(PackageSpec(name="Combinatorics", version="1.0.2"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="Dates"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="DynamicPolynomials", version="0.4.6"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="HDF5", version="0.17.2"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="JuMP", version="1.23.6"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="LinearAlgebra"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="Mosek", version="10.2.0"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="MosekTools", version="0.15.1"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="NLopt", version="1.1.2"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="QuantumOptics", version="1.1.1"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="Random"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(name="Statistics"))' \
+    && julia -e 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/wangjie212/TSSOS"))' \
+    && julia -e 'using Pkg; Pkg.API.precompile()'
 
-# Set up MOSEK license (ensure the license file is available in the build context)
-WORKDIR /code
-COPY . /code
-
-# Install Python Jupyter Notebook and required Python libraries
-RUN pip install --no-cache-dir notebook h5py numpy matplotlib
-
-# Install IJulia and other Julia packages for MOSEK and additional dependencies
-RUN echo "using Pkg; \
-    Pkg.add(\"IJulia\"); \
-    Pkg.add(\"MosekTools\"); \
-    Pkg.add(\"MathOptInterface\"); \
-    Pkg.add(\"LinearAlgebra\"); \
-    Pkg.add(\"QuantumOptics\"); \
-    Pkg.add(\"DynamicPolynomials\"); \
-    Pkg.add(\"Random\"); \
-    Pkg.add(\"JuMP\"); \
-    Pkg.add(\"NLopt\"); \
-    Pkg.add(\"HDF5\"); \
-    Pkg.add(\"Statistics\"); \
-    Pkg.add(\"Dates\"); \
-    Pkg.add(PackageSpec(url=\"https://github.com/wangjie212/TSSOS\"))" > setup.jl \
-    && julia setup.jl \
-    && rm setup.jl
-
-# Expose Jupyter port
-EXPOSE 8888
-
-# Start Jupyter Notebook server with virtual display for GUI
-CMD ["julia", "Hello.jl"]
-
+# Copy files from GitHub repository
+# Replace 'your-github-repo-url' with your actual repository URL
+RUN git clone https://github.com/zpopovych/OQSID_for_Docker.git /root
