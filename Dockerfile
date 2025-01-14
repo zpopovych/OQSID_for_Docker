@@ -88,8 +88,14 @@ RUN julia -e 'using Pkg; Pkg.add(PackageSpec(name="Combinatorics", version="1.0.
 # Copy files from GitHub repository
 RUN git clone https://github.com/zpopovych/OQSID_for_Docker.git /root/OQSID
 
+# Define a volume (optional, for documentation and persistence purposes)
+VOLUME /root/OQSID/results
+
 # Set the working directory
 WORKDIR /root/OQSID/code
 
+# Ensure the script is executable
+RUN chmod +x run.sh
+
 # Default command
-CMD ["bash"]
+CMD ["./run.sh"]
