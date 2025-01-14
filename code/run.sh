@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -ex
 
+# Check if the volume mount has the license file
+if [ -f /results/mosek.lic ]; then
+  echo "Copying MOSEK license to /root/mosek..."
+  mkdir -p /root/mosek
+  cp /results/mosek.lic /root/mosek/mosek.lic
+else
+  echo "MOSEK license file not found!" >&2
+  exit 1
+fi
+
 # Define the directory where the Julia scripts are located
 #SCRIPT_DIR="code"
 
