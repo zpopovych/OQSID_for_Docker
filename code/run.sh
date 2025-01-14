@@ -49,7 +49,7 @@ echo "Julia scripts executed successfully."
 # Run each Python script
 for P_SCRIPT in "${PYTHON_SCRIPTS[@]}"; do
   echo "Running $P_SCRIPT..."
-  python "$P_SCRIPT"
+  python3 "$P_SCRIPT"
   if [ $? -ne 0 ]; then
     echo "Error occurred while running $P_SCRIPT"
     exit 1

@@ -52,6 +52,9 @@ ENV PATH="/usr/local/bin:$PATH"
 # Verify installations
 RUN python3.11 --version && julia --version
 
+RUN ln -s /usr/local/bin/python3.11 /usr/local/bin/python3
+RUN ln -s /usr/local/bin/python3.11 /usr/local/bin/python
+
 # Set MOSEK environment variables
 ENV MOSEK_DIR=/opt/mosek
 ENV MOSEKLM_LICENSE_FILE=/root/mosek/mosek.lic
