@@ -58,8 +58,8 @@ ENV MOSEKLM_LICENSE_FILE=/root/mosek/mosek.lic
 ENV PATH="${MOSEK_DIR}/bin:${PATH}"
 
 # Copy MOSEK license
-RUN mkdir -p /root/mosek
-COPY mosek.lic /root/mosek/mosek.lic
+#RUN mkdir -p /root/mosek
+#COPY mosek.lic /root/mosek/mosek.lic
 
 # Install Python packages
 RUN pip install -U --no-cache-dir \
