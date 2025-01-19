@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructions to Run the Quantum Open System Polynomial SID Reproducible Docker Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 0;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Instructions to Run the <em>quantum-open-system-polynomial-sid</em> Reproducible Docker Image</h1>
+
+    <h2>1. Download the Docker Image:</h2>
+    <ol>
+        <li><strong>Create a separate directory to keep things organized:</strong>
+            <pre><code>mkdir oqsid</code></pre>
+            <pre><code>cd oqsid</code></pre>
+        </li>
+        <li><strong>Download the <em>oqsid</em> Docker image from the following link:</strong>
+            <a href="https://drive.google.com/file/d/1a61hLOgV6hq4TQK3LhxJmHGQ8w0s0FYq/view?usp=sharing" target="_blank">
+                Download oqsid Docker Image
+            </a>
+            https://drive.google.com/file/d/1a61hLOgV6hq4TQK3LhxJmHGQ8w0s0FYq/view?usp=sharing
+        </li>
+        <li><strong>Load the Docker Image from the .tar File:</strong>
+            <pre><code>docker load -i oqsid.tar</code></pre>
+        </li>
+    </ol>
+
+    <h2>2. Obtain a Free MOSEK License:</h2>
+    <ol>
+        <li><strong>Visit MOSEK's Academic License Page to obtain a license:</strong>
+            <a href="https://www.mosek.com/products/academic-licenses/" target="_blank">MOSEK Academic Licenses</a>
+        </li>
+        <li><strong>Save the <em>mosek.lic</em> file to the same directory where the Docker image is located.</strong></li>
+    </ol>
+
+    <h2>3. Run the Docker Image:</h2>
+    <ol>
+        <li><strong>Navigate to the directory containing the <em>mosek.lic</em> file. Then, mount this directory as the <code>/root/OQSID/results</code> directory in the container and run the Docker image:</strong>
+            <pre><code>docker run -v "$(pwd)":/root/OQSID/results oqsid</code></pre>
+        </li>
+    </ol>
+
+    <h2>4. What Happens Next:</h2>
+    <p>The Docker image will automatically:</p>
+    <ul>
+        <li>Download the source code and input data from the repository: 
+            <a href="https://github.com/zpopovych/OQSID_for_Docker" target="_blank">https://github.com/zpopovych/OQSID_for_Docker</a>
+        </li>
+        <li>Run the necessary computations.</li>
+        <li>Save the resulting data files and figures to your current directory.</li>
+    </ul>
+
+    <h2>Note:</h2>
+    <p>Ensure that Docker is installed and running on your system before proceeding. For more information, visit the Docker installation page: 
+        <a href="https://docs.docker.com/get-started/get-docker/" target="_blank">Install Docker</a>.
+    </p>
+
+</body>
+</html>
